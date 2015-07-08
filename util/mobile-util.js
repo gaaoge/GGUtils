@@ -8,7 +8,7 @@
  *      1. 定宽：设定viewport的宽度为固定值(即传递的width值)，并根据屏幕宽度和width值计算viewport缩放比例。
  *      2. REM: 根据设备dpr和屏幕宽度来计算viewport宽度，并根据设备dpr计算viewport缩放比例，然后在html标签中设置font-size的属性值。
  *         对应css开发，任何长度尺寸均使用rem单位，大小设置为设计稿中px单位的尺寸值 / 100;
- *         字体单位不要用rem，使用px并根据dpr指定不同的的字体大小；
+ *         字体单位不要用rem，使用px并根据dpr指定不同的字体大小；
  *         若需要1px物理像素的边框效果，则border的宽度不需要使用rem，设定为1px即可。
  */
 window.mobileUtil = (function (win, doc) {
