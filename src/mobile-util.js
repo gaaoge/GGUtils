@@ -48,7 +48,7 @@ window.mobileUtil = (function (win, doc) {
 
                     scale = w / width;
                     content = 'width=' + width + ',initial-scale=' + scale + ',maximum-scale=' + scale +
-                        ',minimum-scale=' + scale + ',user-scalable=no';
+                        ',minimum-scale=' + scale;
                     break;
                 case 'rem':
                     var docEl = doc.documentElement;
@@ -67,7 +67,7 @@ window.mobileUtil = (function (win, doc) {
 
                     scale = 1 / dpr;
                     content = 'width=' + clientWidth * dpr + ',initial-scale=' + scale + ',maximum-scale=' + scale +
-                        ', minimum-scale=' + scale + ',user-scalable=no';
+                        ', minimum-scale=' + scale;
                     break;
             }
 
