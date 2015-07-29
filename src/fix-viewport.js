@@ -30,6 +30,11 @@
                 var dpr = win.devicePixelRatio || 1;
                 // 设置data-dpr属性，留作css hack设置元素的font-size用
                 docEl.setAttribute('data-dpr', dpr);
+
+                //限制clientWidth的最大值，用于在pc端以640的宽度展示页面
+                if (clientWidth > 640) {
+                    clientWidth = 640 / dpr;
+                }
                 docEl.style.fontSize = 100 * (clientWidth * dpr / width) + "px";
 
                 scale = 1 / dpr;
