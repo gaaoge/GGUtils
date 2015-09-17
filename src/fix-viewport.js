@@ -45,5 +45,5 @@
         });
     }
 
-    fixViewport('rem', 640);
+    fixViewport('fixed', 640);
 }(window, document));
