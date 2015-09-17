@@ -6,19 +6,20 @@
  *  可以选择以下两种情况适配：
  *  1. 定宽：原理是设定viewport的宽度为固定值(即传递的width值)，并根据屏幕宽度和width值计算viewport缩放比例。
  *     实际开发在css中任何长度尺寸均使用px单位，大小设置为设计稿中原始尺寸值；
- *     字体单位使用rem, 大小为设计稿中px单位的尺寸值 / 100;
+ *     字体单位使用em, body下直接子元素字体大小设置为设计稿中尺寸值 / 100；
+ *     非直接子元素若其父元素未设置字体大小则与直接子元素相同，否则根据父元素字体大小计算其相对值。
  *  2. REM：原理是根据设备dpr和屏幕宽度来计算viewport宽度，并根据设备dpr计算viewport缩放比例，然后在html标签中设置font-size的属性值。
- *     实际开发在css中任何长度尺寸均使用rem单位，大小设置为设计稿中px单位的尺寸值 / 100;
- *     字体单位使用px, 根据data-dpr指定不同的字体大小；
+ *     实际开发在css中任何长度尺寸均使用rem单位，大小设置为设计稿中尺寸值 / 100;
+ *     字体单位使用em, body下直接子元素字体大小设置为设计稿中尺寸值 / 100；
+ *     非直接子元素若其父元素未设置字体大小则与直接子元素相同，否则根据父元素字体大小计算其相对值。
  *     若需要1px物理像素的边框效果，则border的宽度不需要使用rem，设定为1px即可。
  */
 
 (function (win, doc) {
     function fixViewport(type, width) {
-        var docEl = doc.documentElement;
         var metaEl = doc.querySelector('meta[name="viewport"]');
-        //由于页面初始设置了viewport的width=device-width,所以此处docEl.clientWidth即是屏幕的设备宽度（同时判断clientHeight以较小值为准）
-        var clientWidth = Math.min(docEl.clientWidth, docEl.clientHeight);
+        //由于初始设置了viewport的width=device-width,所以此处docEl.clientWidth即是屏幕的设备宽度
+        var clientWidth = doc.documentElement.clientWidth;
         var scale, content;
 
         switch (type) {
@@ -26,22 +27,23 @@
                 scale = clientWidth / width;
                 content = 'width=' + width + ',initial-scale=' + scale + ',maximum-scale=' + scale +
                     ',minimum-scale=' + scale;
-                docEl.style.fontSize = 50 / scale + 'px';
                 break;
             case 'rem':
                 var dpr = win.devicePixelRatio || 1;
-                // 设置data-dpr属性，留作css hack设置元素的font-size用
-                docEl.setAttribute('data-dpr', dpr);
-                docEl.style.fontSize = 100 * (clientWidth * dpr / width) + "px";
-
                 scale = 1 / dpr;
                 content = 'width=' + clientWidth * dpr + ',initial-scale=' + scale + ',maximum-scale=' + scale +
                     ', minimum-scale=' + scale;
+
+                doc.documentElement.style.fontSize = 100 * (clientWidth * dpr / width) + "px";
                 break;
         }
 
         metaEl.setAttribute('content', content);
+        //设置body的基准字体大小
+        win.addEventListener('DOMContentLoaded', function () {
+            doc.body.style.fontSize = 50 / scale + 'px';
+        });
     }
 
-    fixViewport('fixed', 640);
+    fixViewport('rem', 640);
 }(window, document));
