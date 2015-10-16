@@ -15,35 +15,31 @@
  *     若需要1px物理像素的边框效果，则border的宽度不需要使用rem，设定为1px即可。
  */
 
-(function (win, doc) {
-    function fixViewport(type, width) {
-        var metaEl = doc.querySelector('meta[name="viewport"]');
+(function () {
+    function fixViewport(type, designWidth) {
+        var metaEl = document.querySelector('meta[name="viewport"]');
         //由于初始设置了viewport的width=device-width,所以此处docEl.clientWidth即是屏幕的设备宽度
-        var clientWidth = doc.documentElement.clientWidth;
-        var scale, content;
+        var clientWidth = document.documentElement.clientWidth;
+        var width, scale;
 
         switch (type) {
             case 'fixed':
-                scale = clientWidth / width;
-                content = 'width=' + width + ',initial-scale=' + scale + ',maximum-scale=' + scale +
-                    ',minimum-scale=' + scale;
+                width = designWidth;
+                scale = clientWidth / designWidth;
                 break;
             case 'rem':
-                var dpr = win.devicePixelRatio || 1;
+                var dpr = window.devicePixelRatio || 1;
+                width = clientWidth * dpr;
                 scale = 1 / dpr;
-                content = 'width=' + clientWidth * dpr + ',initial-scale=' + scale + ',maximum-scale=' + scale +
-                    ', minimum-scale=' + scale;
-
-                doc.documentElement.style.fontSize = 100 * (clientWidth * dpr / width) + "px";
+                document.documentElement.style.fontSize = 100 * (clientWidth * dpr / designWidth) + "px";
                 break;
         }
+        metaEl.setAttribute('content', 'width=' + width + ',initial-scale=' + scale + ',maximum-scale=' + scale +
+            ',minimum-scale=' + scale);
 
-        metaEl.setAttribute('content', content);
         //设置body的基准字体大小
-        win.addEventListener('DOMContentLoaded', function () {
-            doc.body.style.fontSize = 50 / scale + 'px';
-        });
+        document.body.style.fontSize = 50 / scale + 'px';
     }
 
-    fixViewport('fixed', 640);
-}(window, document));
+    fixViewport('rem', 640);
+}());
