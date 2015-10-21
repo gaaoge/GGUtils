@@ -38,7 +38,9 @@
             ',minimum-scale=' + scale);
 
         //设置body的基准字体大小
-        document.body.style.fontSize = 50 / scale + 'px';
+        window.addEventListener('DOMContendedLoaded', function () {
+            document.body.style.fontSize = 50 / scale + 'px';
+        });
     }
 
     fixViewport('rem', 640);
