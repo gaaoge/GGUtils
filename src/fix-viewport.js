@@ -38,7 +38,7 @@
             ',minimum-scale=' + scale);
 
         //设置body的基准字体大小
-        window.addEventListener('DOMContendedLoaded', function () {
+        window.addEventListener('DOMContentLoaded', function () {
             document.body.style.fontSize = 50 / scale + 'px';
         });
     }
